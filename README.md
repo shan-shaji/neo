@@ -27,11 +27,8 @@ dart pub global activate --source=path <path to this package>
 ## Usage
 
 ```sh
-# Sample command
-$ neo sample
-
-# Sample command optioon
-$ neo sample --cyan
+# build_runner build command
+$ neo build_runner build
 
 # Show CLI version
 $ neo --version
@@ -40,26 +37,6 @@ $ neo --version
 $ neo --help
 ```
 
-## Running Tests with coverage 🧪
-
-To run all unit tests use the following command:
-
-```sh
-$ dart pub global activate coverage 1.2.0
-$ dart test --coverage=coverage
-$ dart pub global run coverage:format_coverage --lcov --in=coverage --out=coverage/lcov.info
-```
-
-To view the generated coverage report you can use [lcov](https://github.com/linux-test-project/lcov)
-.
-
-```sh
-# Generate Coverage Report
-$ genhtml coverage/lcov.info -o coverage/
-
-# Open Coverage Report
-$ open coverage/index.html
-```
 
 ---
 

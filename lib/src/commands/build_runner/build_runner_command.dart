@@ -16,7 +16,7 @@ class BuildRunnerCommand extends Command<int> {
   String get summary => '$invocation\n$description';
 
   @override
-  String get description => 'A command to generate dart code.';
+  String get description => 'Command that helps to run all build_runner commands.';
 
   @override
   String get name => 'build_runner';

@@ -1,5 +1,5 @@
 name: neo
-description: A Very Good Project created by Very Good CLI.
+description: Tool that helps you to run code generation commands.
 version: 0.0.1
 publish_to: none
 
