@@ -4,7 +4,8 @@ import 'package:neo/src/commands/build_runner/commands/build/build.dart';
 /// {@template build_runner}
 ///
 /// `neo build_runner`
-/// A [Command] to exemplify a sub command
+/// A [Command] to exemplify a sub command.
+/// This command will only run with a sub command(branch command).
 /// {@endtemplate}
 class BuildRunnerCommand extends Command<int> {
   /// {@macro build_runner}

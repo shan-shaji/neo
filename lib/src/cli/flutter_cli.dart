@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:neo/src/cli/cli.dart';
+import 'package:neo/src/exceptions/pubspec_not_found.dart';
 import 'package:path/path.dart' as p;
 
 const _ignoredDirectories = {
@@ -32,7 +33,6 @@ Future<List<T>> runCommand<T>({
   if (!recursive) {
     final pubspec = File(p.join(cwd, 'pubspec.yaml'));
     if (!pubspec.existsSync()) throw PubspecNotFound();
-
     return [await cmd(cwd)];
   }
 
@@ -50,7 +50,3 @@ Future<List<T>> runCommand<T>({
   }
   return results;
 }
-
-/// Thrown when `flutter packages get` or `flutter pub get`
-/// is executed without a `pubspec.yaml`.
-class PubspecNotFound implements Exception {}
