@@ -37,9 +37,6 @@ $ neo --version
 $ neo --help
 ```
 
-
----
-
 [coverage_badge]: coverage_badge.svg
 [license_badge]: https://img.shields.io/badge/license-MIT-blue.svg
 [license_link]: https://opensource.org/licenses/MIT
