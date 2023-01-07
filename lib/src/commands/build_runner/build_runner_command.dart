@@ -1,5 +1,5 @@
 import 'package:args/command_runner.dart';
-import 'package:neo/src/commands/build_runner/commands/build.dart';
+import 'package:neo/src/commands/build_runner/commands/build/build.dart';
 
 /// {@template build_runner}
 ///
