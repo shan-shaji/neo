@@ -1,7 +1,7 @@
 name: neo
 description: Tool that helps you to run code generation commands.
-version: 0.0.1
-publish_to: none
+version: 1.0.0-dev-1
+homepage: https://github.com/shan-shaji/neo
 
 environment:
   sdk: ">=2.18.0 <3.0.0"
@@ -9,6 +9,7 @@ environment:
 dependencies:
   args: ^2.3.1
   mason_logger: ^0.2.0
+  path: ^1.8.3
   pub_updater: ^0.2.1
   pubspec_parse: ^1.2.1
 
