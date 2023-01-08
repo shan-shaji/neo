@@ -1,5 +1,6 @@
 import 'package:args/command_runner.dart';
 import 'package:neo/src/commands/build_runner/commands/build/build.dart';
+import 'package:neo/src/commands/build_runner/commands/watch/watch.dart';
 
 /// {@template build_runner}
 ///
@@ -11,6 +12,7 @@ class BuildRunnerCommand extends Command<int> {
   /// {@macro build_runner}
   BuildRunnerCommand() {
     addSubcommand(BuildCommand());
+    addSubcommand(WatchCommand());
   }
 
   @override
