@@ -1,6 +1,6 @@
 import 'package:args/command_runner.dart';
+import 'package:mason_logger/mason_logger.dart';
 import 'package:neo/src/commands/build_runner/commands/build/build.dart';
-import 'package:neo/src/commands/build_runner/commands/watch/watch.dart';
 
 /// {@template build_runner}
 ///
@@ -10,9 +10,8 @@ import 'package:neo/src/commands/build_runner/commands/watch/watch.dart';
 /// {@endtemplate}
 class BuildRunnerCommand extends Command<int> {
   /// {@macro build_runner}
-  BuildRunnerCommand() {
-    addSubcommand(BuildCommand());
-    addSubcommand(WatchCommand());
+  BuildRunnerCommand({required Logger logger}) {
+    addSubcommand(BuildCommand(logger: logger));
   }
 
   @override

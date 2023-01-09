@@ -78,7 +78,6 @@ class Cmd {
     logger
       ..detail('stdout:\n${result.stdout}')
       ..detail('stderr:\n${result.stderr}');
-
     if (throwOnError) {
       _throwIfProcessFailed(result, cmd, args);
     }

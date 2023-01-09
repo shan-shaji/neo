@@ -1,13 +1,16 @@
 import 'package:args/args.dart';
 import 'package:args/command_runner.dart';
+import 'package:hive/hive.dart';
 import 'package:mason_logger/mason_logger.dart';
 import 'package:neo/src/commands/commands.dart';
+import 'package:neo/src/helpers/app_data.dart';
+import 'package:neo/src/helpers/hive_db.dart';
 import 'package:neo/src/version.dart';
 import 'package:pub_updater/pub_updater.dart';
 
 const executableName = 'neo';
 const packageName = 'neo';
-const description = 'CLI that frees you from remebering long build commands.';
+const description = 'CLI that frees you from remebering long commands.';
 
 /// {@template neo_command_runner}
 /// A [CommandRunner] for the CLI.
@@ -38,7 +41,8 @@ class NeoCommandRunner extends CommandRunner<int> {
       );
 
     // Add sub commands
-    addCommand(BuildRunnerCommand());
+    addCommand(BuildRunnerCommand(logger: _logger));
+    addCommand(Commands(logger: _logger));
     addCommand(UpdateCommand(logger: _logger, pubUpdater: _pubUpdater));
   }
 
@@ -55,6 +59,12 @@ class NeoCommandRunner extends CommandRunner<int> {
       if (topLevelResults['verbose'] == true) {
         _logger.level = Level.verbose;
       }
+
+      // Initialize hive every time when the script runs
+      final neoDir = AppData.findOrCreate('.neo');
+      Hive.init(neoDir.path);
+      await HiveDB.i.openBox();
+
       return await runCommand(topLevelResults) ?? ExitCode.success.code;
     } on FormatException catch (e, stackTrace) {
       // On format errors, show the commands error message, root usage and
