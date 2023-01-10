@@ -23,7 +23,7 @@ dart pub global activate --source=path <path to this package>
 
 ```sh
 # build_runner build command
-$ neo build_runner build
+$ neo commands list
 
 # Show CLI version
 $ neo --version

@@ -41,7 +41,6 @@ class NeoCommandRunner extends CommandRunner<int> {
       );
 
     // Add sub commands
-    addCommand(BuildRunnerCommand(logger: _logger));
     addCommand(Commands(logger: _logger));
     addCommand(UpdateCommand(logger: _logger, pubUpdater: _pubUpdater));
   }
