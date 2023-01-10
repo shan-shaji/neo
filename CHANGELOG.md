@@ -1,3 +1,6 @@
+# 1.0.0-dev.3
+- update readme
+
 # 1.0.0-dev.2
 - Introduce commands save, list and select features
 

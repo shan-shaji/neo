@@ -21,8 +21,11 @@ dart pub global activate --source=path <path to this package>
 ## Usage
 
 ```sh
-# build_runner build command
+# list your saved commands
 $ neo commands list
+
+# select the command to exceute
+$ neo commands select
 
 # Show CLI version
 $ neo --version
