@@ -32,10 +32,11 @@ class SelectCommand extends Command<int> {
   @override
   Future<int> run() async {
     try {
-      final savedCommands = await HiveDB.i.getCommands();
+      final savedCommands = HiveDB.i.getCommands();
+      final commands = savedCommands.map((e) => e.command).toList();
       final command = _logger.chooseOne(
         'Select your command',
-        choices: savedCommands,
+        choices: commands,
       );
       await executeCommand(command);
       return ExitCode.success.code;

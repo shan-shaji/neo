@@ -1,31 +1,43 @@
 import 'dart:async';
 import 'package:hive/hive.dart';
 
+class SavedCommands {
+  SavedCommands({
+    this.key = 0,
+    this.command = '',
+  });
+  int key;
+  String command;
+}
+
 class HiveDB {
   static HiveDB i = HiveDB();
 
   FutureOr<void> openBox() async {
-    await Hive.openBox<List<String>>('neo');
+    await Hive.openBox<String>('neo');
   }
 
   FutureOr<bool> storeCommands(String command) async {
     try {
-      final box = Hive.box<List<String>>('neo');
-      final oldCommands = box.get('commands');
-      await box.put('commands', [command, ...?oldCommands]);
+      final box = Hive.box<String>('neo');
+      await box.add(command);
       return true;
     } catch (e) {
       return false;
     }
   }
 
-  FutureOr<List<String>> getCommands() async {
-    try {
-      final box = Hive.box<List<String>>('neo');
-      final oldCommands = box.get('commands');
-      return oldCommands ?? [];
-    } catch (e) {
-      return [];
+  List<SavedCommands> getCommands() {
+    final box = Hive.box<String>('neo');
+    final commands = <SavedCommands>[];
+    var key = 1;
+    for (final command in box.values) {
+      final cmd = SavedCommands()
+        ..command = command
+        ..key = key;
+      commands.add(cmd);
+      key += 1;
     }
+    return commands;
   }
 }
