@@ -5,7 +5,7 @@
 
 Tool that relieves you of the burden of remembering long commands. Neo saves your commands to your system and makes them accessible to you.
 
----
+--
 
 ## Getting Started 🚀
 
