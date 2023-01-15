@@ -1,5 +1,6 @@
 import 'package:args/command_runner.dart';
 import 'package:mason_logger/mason_logger.dart';
+import 'package:neo/src/commands/commands/delete/delete.dart';
 import 'package:neo/src/commands/commands/list/list.dart';
 import 'package:neo/src/commands/commands/save/save.dart';
 import 'package:neo/src/commands/commands/select/select.dart';
@@ -9,6 +10,7 @@ class Commands extends Command<int> {
     addSubcommand(Save(logger: logger));
     addSubcommand(SelectCommand(logger: logger));
     addSubcommand(ListCommand());
+    addSubcommand(DeleteCommand(logger: logger));
   }
 
   @override

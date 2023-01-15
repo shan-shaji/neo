@@ -27,6 +27,16 @@ class HiveDB {
     }
   }
 
+  Future<bool> deleteCommand(int index) async {
+    try {
+      final box = Hive.box<String>('neo');
+      await box.delete(index - 1);
+      return true;
+    } catch (e) {
+      return false;
+    }
+  }
+
   List<SavedCommands> getCommands() {
     final box = Hive.box<String>('neo');
     final commands = <SavedCommands>[];
