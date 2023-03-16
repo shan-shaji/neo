@@ -60,6 +60,13 @@ class _ProcessOverridesScope extends ProcessOverrides {
 /// Abstraction for running commands via command-line.
 class Cmd {
   /// Runs the specified [cmd] with the provided [args].
+  ///
+  /// If [throwOnError] is set to `true` (default), the method will throw an exception
+  /// if the process returns a non-zero exit code.
+  ///
+  /// [workingDirectory] specifies the working directory of the command.
+  ///
+  /// [logger] is used to log output messages.
   static Future<ProcessResult> run(
     String cmd,
     List<String> args, {
@@ -68,6 +75,8 @@ class Cmd {
     required Logger logger,
   }) async {
     logger.detail('Running: $cmd with $args');
+    // Get the overridden Process.run function if it exists, otherwise use the
+    // default implementation.
     final runProcess = ProcessOverrides.current?.runProcess ?? Process.run;
     final result = await runProcess(
       cmd,
@@ -84,6 +93,12 @@ class Cmd {
     return result;
   }
 
+  /// Runs a specified function on all files and directories that match a
+  /// specified condition.
+  ///
+  /// For each file or directory in [cwd] and its subdirectories, the function
+  /// [run] is called if the file or directory satisfies [where]. Returns an
+  /// iterable of the returned values from each invocation of [run].
   static Iterable<Future<T>> runWhere<T>({
     required Future<T> Function(FileSystemEntity) run,
     required bool Function(FileSystemEntity) where,
@@ -100,7 +115,7 @@ class Cmd {
     if (pr.exitCode != 0) {
       final values = {
         'Standard out': pr.stdout.toString().trim(),
-        'Standard error': pr.stderr.toString().trim()
+        'Standard error': pr.stderr.toString().trim(),
       }..removeWhere((k, v) => v.isEmpty);
 
       var message = 'Unknown error';

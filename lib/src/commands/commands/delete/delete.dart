@@ -1,4 +1,3 @@
-import 'package:args/args.dart';
 import 'package:args/command_runner.dart';
 import 'package:dart_console/dart_console.dart';
 import 'package:mason_logger/mason_logger.dart';
@@ -25,7 +24,7 @@ class DeleteCommand extends Command<int> {
     final console = Console();
     final key = argResults?['key'];
     if (key is! String) {
-      _logger.info('Please provide a valid key to delete you commands');
+      _logger.info('Please provide a valid key to delete your commands');
       return ExitCode.data.code;
     }
     final index = int.tryParse(key) ?? 0;
@@ -39,7 +38,7 @@ class DeleteCommand extends Command<int> {
       ..insertRows(rows)
       ..borderStyle = BorderStyle.square
       ..borderColor = ConsoleColor.brightCyan
-      ..borderType = BorderType.outline;
+      ..borderType = BorderType.grid;
     console.writeLine(table);
     return ExitCode.success.code;
   }
