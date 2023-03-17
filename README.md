@@ -36,6 +36,7 @@ $ neo --help
 
 # Todo
 
+- [ ] Add develop command that will listen to changes while developing a cli and automaticaly update the local path.
 - [ ] Command Alias: Allow users to create an alias for a long command by giving it a shorter name. This can make it easier to remember and execute the command.
 - [ ] Command History: Keep a history of executed commands and allow users to easily recall and execute them again.
 - [ ] Command Templates: Allow users to save command templates that can be easily modified and executed. This can be useful for commands that require multiple arguments or options.

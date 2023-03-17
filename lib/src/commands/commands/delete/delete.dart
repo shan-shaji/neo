@@ -32,6 +32,8 @@ class DeleteCommand extends Command<int> {
     await HiveDB.i.deleteCommand(index);
     final savedCommands = HiveDB.i.getCommands();
     final rows = savedCommands.map((e) => [e.key, e.command]).toList();
+    print('rows');
+    print(rows);
     final table = Table()
       ..insertColumn(header: 'Key', alignment: TextAlignment.center)
       ..insertColumn(header: 'Command', alignment: TextAlignment.center)
