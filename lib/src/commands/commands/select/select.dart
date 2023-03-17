@@ -20,7 +20,11 @@ class SelectCommand extends Command<int> {
     final progress = _logger.progress('Running $command..');
     try {
       final cmds = command.split(' ');
-      await Cmd.run(cmds.elementAt(0), [...cmds.sublist(1)], logger: _logger);
+      await Cmd.run(
+        cmds.elementAt(0),
+        [...cmds.sublist(1)],
+        logger: _logger,
+      );
       progress.complete('Completed..');
     } catch (e) {
       progress
