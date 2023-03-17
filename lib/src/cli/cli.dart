@@ -61,7 +61,8 @@ class _ProcessOverridesScope extends ProcessOverrides {
 class Cmd {
   /// Runs the specified [cmd] with the provided [args].
   ///
-  /// If [throwOnError] is set to `true` (default), the method will throw an exception
+  /// If [throwOnError] is set to `true` (default), the method will
+  /// throw an exception
   /// if the process returns a non-zero exit code.
   ///
   /// [workingDirectory] specifies the working directory of the command.
