@@ -3,8 +3,8 @@ import 'package:args/command_runner.dart';
 import 'package:hive/hive.dart';
 import 'package:mason_logger/mason_logger.dart';
 import 'package:neo/src/commands/commands.dart';
-import 'package:neo/src/helpers/app_data_helper.dart';
 import 'package:neo/src/helpers/app_hive_db_helper.dart';
+import 'package:neo/src/helpers/app_platform_helper.dart';
 import 'package:neo/src/version.dart';
 import 'package:pub_updater/pub_updater.dart';
 
@@ -60,7 +60,7 @@ class NeoCommandRunner extends CommandRunner<int> {
       }
 
       // Initialize hive every time when the script runs
-      final neoDir = AppData.findOrCreate('.neo');
+      final neoDir = AppDataHelper.findOrCreate('.neo');
       Hive.init(neoDir.path);
       await HiveDB.i.openBox();
 
