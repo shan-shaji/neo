@@ -1,7 +1,8 @@
 import 'package:args/command_runner.dart';
 import 'package:dart_console/dart_console.dart';
 import 'package:mason_logger/mason_logger.dart';
-import 'package:neo/src/helpers/hive_db.dart';
+import 'package:neo/src/helpers/app_console_helper.dart';
+import 'package:neo/src/helpers/app_hive_db_helper.dart';
 
 class ListCommand extends Command<int> {
   @override
@@ -14,14 +15,9 @@ class ListCommand extends Command<int> {
   Future<int> run() async {
     final console = Console();
     final savedCommands = HiveDB.i.getCommands();
-    final rows = savedCommands.map((e) => [e.key, e.command]).toList();
-    final table = Table()
-      ..insertColumn(header: 'Key', alignment: TextAlignment.center)
-      ..insertColumn(header: 'Command', alignment: TextAlignment.center)
-      ..insertRows(rows)
-      ..borderStyle = BorderStyle.square
-      ..borderColor = ConsoleColor.brightCyan
-      ..borderType = BorderType.vertical;
+    final rows =
+        savedCommands.map((value) => [value.key, value.command]).toList();
+    final table = AppConsoleHelper.renderTable(rows, ['Keys', 'Command']);
     console.writeLine(table);
     return ExitCode.success.code;
   }

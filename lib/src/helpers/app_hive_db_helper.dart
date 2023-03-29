@@ -22,7 +22,7 @@ class HiveDB {
       final box = Hive.box<String>('neo');
       await box.add(command);
       return true;
-    } catch (e) {
+    } catch (_) {
       return false;
     }
   }
@@ -32,7 +32,7 @@ class HiveDB {
       final box = Hive.box<String>('neo');
       await box.delete(index - 1);
       return true;
-    } catch (e) {
+    } catch (_) {
       return false;
     }
   }

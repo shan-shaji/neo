@@ -1,6 +1,6 @@
 import 'package:args/command_runner.dart';
 import 'package:mason_logger/mason_logger.dart';
-import 'package:neo/src/helpers/hive_db.dart';
+import 'package:neo/src/helpers/app_hive_db_helper.dart';
 
 class Save extends Command<int> {
   Save({required Logger logger}) : _logger = logger;

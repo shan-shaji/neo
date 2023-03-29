@@ -1,61 +1,10 @@
 import 'dart:async';
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:mason_logger/mason_logger.dart';
 
-const _asyncRunZoned = runZoned;
-
-/// Type definition for [Process.run].
-typedef RunProcess = Future<ProcessResult> Function(
-  String executable,
-  List<String> arguments, {
-  String? workingDirectory,
-  bool runInShell,
-});
-
-/// This class facilitates overriding [Process.run].
-/// It should be extended by another class in client code with overrides
-/// that construct a custom implementation.
-abstract class ProcessOverrides {
-  static final _token = Object();
-
-  /// Returns the current [ProcessOverrides] instance.
-  ///
-  /// This will return `null` if the current [Zone] does not contain
-  /// any [ProcessOverrides].
-  ///
-  /// See also:
-  /// * [ProcessOverrides.runZoned] to provide [ProcessOverrides]
-  /// in a fresh [Zone].
-  ///
-  static ProcessOverrides? get current {
-    return Zone.current[_token] as ProcessOverrides?;
-  }
-
-  /// Runs [body] in a fresh [Zone] using the provided overrides.
-  static R runZoned<R>(
-    R Function() body, {
-    RunProcess? runProcess,
-  }) {
-    final overrides = _ProcessOverridesScope(runProcess);
-    return _asyncRunZoned(body, zoneValues: {_token: overrides});
-  }
-
-  /// The method used to run a [Process].
-  RunProcess get runProcess => Process.run;
-}
-
-class _ProcessOverridesScope extends ProcessOverrides {
-  _ProcessOverridesScope(this._runProcess);
-
-  final ProcessOverrides? _previous = ProcessOverrides.current;
-  final RunProcess? _runProcess;
-
-  @override
-  RunProcess get runProcess {
-    return _runProcess ?? _previous?.runProcess ?? super.runProcess;
-  }
-}
+part 'process_overrides.dart';
 
 /// Abstraction for running commands via command-line.
 class Cmd {
@@ -94,18 +43,67 @@ class Cmd {
     return result;
   }
 
-  /// Runs a specified function on all files and directories that match a
-  /// specified condition.
+  /// It runs a process and logs the output to the
+  /// console when [verbose] is true.
   ///
-  /// For each file or directory in [cwd] and its subdirectories, the function
-  /// [run] is called if the file or directory satisfies [where]. Returns an
-  /// iterable of the returned values from each invocation of [run].
-  static Iterable<Future<T>> runWhere<T>({
-    required Future<T> Function(FileSystemEntity) run,
-    required bool Function(FileSystemEntity) where,
-    String cwd = '.',
-  }) {
-    return Directory(cwd).listSync(recursive: true).where(where).map(run);
+  /// Args:
+  ///  - [programName] (String): The name of the program to run.
+  ///  - [arguments] (List<String>): The arguments to pass
+  ///    to the program. Defaults to const []
+  ///  - [workingDirectory] (String): The directory to run the command in.
+  ///  - [verbose] (bool): Determine when to log the output to the console.
+  ///  - [handleOutput] (Function): Function passed to handle the output.
+  static Future<void> runProcessAndLog({
+    required String programName,
+    List<String> arguments = const [],
+    String? workingDirectory,
+    bool verbose = true,
+    Future<void> Function(List<String> lines)? handleOutput,
+    required Logger logger,
+  }) async {
+    if (verbose) {
+      final hasWorkingDirectory = workingDirectory != null;
+      logger.info('Running $programName ${arguments.join(' ')} '
+          '${hasWorkingDirectory ? 'in $workingDirectory/' : ''}...');
+    }
+
+    try {
+      final process = await Process.start(
+        programName,
+        arguments,
+        workingDirectory: workingDirectory,
+        runInShell: true,
+      );
+
+      final lines = <String>[];
+      const lineSplitter = LineSplitter();
+      await process.stdout.transform(utf8.decoder).forEach((output) {
+        if (verbose) {
+          logger.detail(output);
+        }
+
+        if (handleOutput != null) {
+          lines.addAll(
+            lineSplitter
+                .convert(output)
+                .map((l) => l.trim())
+                .where((l) => l.isNotEmpty)
+                .toList(),
+          );
+        }
+      });
+      await handleOutput?.call(lines);
+      final exitCode = await process.exitCode;
+      if (verbose) logger.success('$exitCode');
+    } on ProcessException catch (e, _) {
+      final message = 'Command failed. Command executed: $programName '
+          '${arguments.join(' ')}\nException: ${e.message}';
+      logger.err(message);
+    } catch (e, _) {
+      final message = 'Command failed. Command executed: $programName'
+          '${arguments.join(' ')}\nException: $e';
+      logger.err(message);
+    }
   }
 
   static void _throwIfProcessFailed(
@@ -118,12 +116,10 @@ class Cmd {
         'Standard out': pr.stdout.toString().trim(),
         'Standard error': pr.stderr.toString().trim(),
       }..removeWhere((k, v) => v.isEmpty);
-
       var message = 'Unknown error';
       if (values.isNotEmpty) {
         message = values.entries.map((e) => '${e.key}\n${e.value}').join('\n');
       }
-
       throw ProcessException(process, args, message, pr.exitCode);
     }
   }

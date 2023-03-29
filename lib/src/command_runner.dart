@@ -3,8 +3,8 @@ import 'package:args/command_runner.dart';
 import 'package:hive/hive.dart';
 import 'package:mason_logger/mason_logger.dart';
 import 'package:neo/src/commands/commands.dart';
-import 'package:neo/src/helpers/app_data.dart';
-import 'package:neo/src/helpers/hive_db.dart';
+import 'package:neo/src/helpers/app_data_helper.dart';
+import 'package:neo/src/helpers/app_hive_db_helper.dart';
 import 'package:neo/src/version.dart';
 import 'package:pub_updater/pub_updater.dart';
 

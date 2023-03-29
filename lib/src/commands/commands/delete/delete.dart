@@ -1,14 +1,12 @@
 import 'package:args/command_runner.dart';
 import 'package:dart_console/dart_console.dart';
 import 'package:mason_logger/mason_logger.dart';
-import 'package:neo/src/helpers/hive_db.dart';
+import 'package:neo/src/helpers/app_console_helper.dart';
+import 'package:neo/src/helpers/app_hive_db_helper.dart';
 
 class DeleteCommand extends Command<int> {
   DeleteCommand({Logger? logger}) : _logger = logger ?? Logger() {
-    argParser.addOption(
-      'key',
-      abbr: 'k',
-    );
+    argParser.addOption('key', abbr: 'k');
   }
 
   final Logger _logger;
@@ -31,16 +29,9 @@ class DeleteCommand extends Command<int> {
     if (index == 0) return ExitCode.ioError.code;
     await HiveDB.i.deleteCommand(index);
     final savedCommands = HiveDB.i.getCommands();
-    final rows = savedCommands.map((e) => [e.key, e.command]).toList();
-    print('rows');
-    print(rows);
-    final table = Table()
-      ..insertColumn(header: 'Key', alignment: TextAlignment.center)
-      ..insertColumn(header: 'Command', alignment: TextAlignment.center)
-      ..insertRows(rows)
-      ..borderStyle = BorderStyle.square
-      ..borderColor = ConsoleColor.brightCyan
-      ..borderType = BorderType.grid;
+    final rows =
+        savedCommands.map((value) => [value.key, value.command]).toList();
+    final table = AppConsoleHelper.renderTable(rows, ['Keys', 'Command']);
     console.writeLine(table);
     return ExitCode.success.code;
   }
