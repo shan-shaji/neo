@@ -1,15 +1,17 @@
 import 'package:args/command_runner.dart';
 import 'package:dart_console/dart_console.dart';
 import 'package:mason_logger/mason_logger.dart';
+import 'package:neo/src/app/locator.dart';
 import 'package:neo/src/helpers/app_console_helper.dart';
-import 'package:neo/src/helpers/app_hive_db_helper.dart';
+import 'package:neo/src/services/hive_db/app_hive_db_service.dart';
 
 class DeleteCommand extends Command<int> {
-  DeleteCommand({Logger? logger}) : _logger = logger ?? Logger() {
+  DeleteCommand() {
     argParser.addOption('key', abbr: 'k');
   }
 
-  final Logger _logger;
+  final _hiveDbCommandService = locator<AppHiveDBCommandsService>();
+  final Logger _logger = locator<Logger>();
 
   @override
   String get description => 'Delete the command by key';
@@ -27,8 +29,8 @@ class DeleteCommand extends Command<int> {
     }
     final index = int.tryParse(key) ?? 0;
     if (index == 0) return ExitCode.ioError.code;
-    await HiveDB.i.deleteCommand(index);
-    final savedCommands = HiveDB.i.getCommands();
+    await _hiveDbCommandService.deleteCommand(index);
+    final savedCommands = _hiveDbCommandService.getCommands();
     final rows =
         savedCommands.map((value) => [value.key, value.command]).toList();
     final table = AppConsoleHelper.renderTable(rows, ['Keys', 'Command']);

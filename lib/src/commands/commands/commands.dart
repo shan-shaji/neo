@@ -4,17 +4,18 @@ import 'package:neo/src/commands/commands/delete/delete.dart';
 import 'package:neo/src/commands/commands/list/list.dart';
 import 'package:neo/src/commands/commands/save/save.dart';
 import 'package:neo/src/commands/commands/select/select.dart';
+import 'package:neo/src/helpers/extensions/app_string_extension_helper.dart';
 
 class Commands extends Command<int> {
-  Commands({required Logger logger}) {
-    addSubcommand(Save(logger: logger));
-    addSubcommand(SelectCommand(logger: logger));
+  Commands() {
+    addSubcommand(Save());
+    addSubcommand(SelectCommand());
     addSubcommand(ListCommand());
-    addSubcommand(DeleteCommand(logger: logger));
+    addSubcommand(DeleteCommand());
   }
 
   @override
-  String get description => 'Save your flutter commands to your system.';
+  String get description => 'neo_commands_description'.tr;
 
   @override
   String get name => 'commands';

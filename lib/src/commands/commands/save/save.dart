@@ -1,14 +1,15 @@
 import 'package:args/command_runner.dart';
 import 'package:mason_logger/mason_logger.dart';
-import 'package:neo/src/helpers/app_hive_db_helper.dart';
+import 'package:neo/src/app/locator.dart';
+import 'package:neo/src/helpers/extensions/app_string_extension_helper.dart';
+import 'package:neo/src/services/app_services.dart';
 
 class Save extends Command<int> {
-  Save({required Logger logger}) : _logger = logger;
-
-  final Logger _logger;
+  final _hiveDbCommandService = locator<AppHiveDBCommandsService>();
+  final _logger = locator<Logger>();
 
   @override
-  String get description => 'Save your flutter commands to your system.';
+  String get description => 'neo_save_command_description'.tr;
 
   @override
   String get name => 'save';
@@ -18,7 +19,15 @@ class Save extends Command<int> {
     try {
       final response = _logger.prompt('Enter or paste your command to save: ');
       if (response.isEmpty) return ExitCode.noInput.code;
-      await HiveDB.i.storeCommands(response);
+
+      final commandAlias = _logger.prompt(
+        'Enter alias for the command (optional): ',
+      );
+
+      await _hiveDbCommandService.storeCommands(
+        response,
+        commandAlias,
+      );
       return ExitCode.success.code;
     } catch (e) {
       return ExitCode.software.code;

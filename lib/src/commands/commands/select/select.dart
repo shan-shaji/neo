@@ -2,16 +2,17 @@ import 'dart:async';
 
 import 'package:args/command_runner.dart';
 import 'package:mason_logger/mason_logger.dart';
+import 'package:neo/src/app/locator.dart';
 import 'package:neo/src/cli/cli.dart';
-import 'package:neo/src/helpers/app_hive_db_helper.dart';
+import 'package:neo/src/helpers/extensions/app_string_extension_helper.dart';
+import 'package:neo/src/services/app_services.dart';
 
 class SelectCommand extends Command<int> {
-  SelectCommand({required Logger logger}) : _logger = logger;
-
-  final Logger _logger;
+  final _hiveDbCommandService = locator<AppHiveDBCommandsService>();
+  final _logger = locator<Logger>();
 
   @override
-  String get description => 'select your saved commands to run.';
+  String get description => 'neo_select_command_decription'.tr;
 
   @override
   String get name => 'select';
@@ -28,13 +29,13 @@ class SelectCommand extends Command<int> {
   @override
   Future<int> run() async {
     try {
-      final localCommands = HiveDB.i.getCommands();
+      final localCommands = _hiveDbCommandService.getCommands();
       final commands = localCommands.map((value) => value.command).toList();
       final command = _logger.chooseOne(
-        'Select your command?',
+        'neo_select_command_question'.tr,
         choices: commands,
       );
-      await executeCommand(command);
+      await executeCommand(command!);
       return ExitCode.success.code;
     } catch (e) {
       return ExitCode.software.code;

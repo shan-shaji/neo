@@ -2,15 +2,17 @@ import 'package:args/args.dart';
 import 'package:args/command_runner.dart';
 import 'package:hive/hive.dart';
 import 'package:mason_logger/mason_logger.dart';
+import 'package:neo/src/app/locator.dart';
 import 'package:neo/src/commands/commands.dart';
 import 'package:neo/src/helpers/app_data_helper.dart';
-import 'package:neo/src/helpers/app_hive_db_helper.dart';
+import 'package:neo/src/services/app_services.dart';
+import 'package:neo/src/services/localization/app_localization_service.dart';
 import 'package:neo/src/version.dart';
 import 'package:pub_updater/pub_updater.dart';
 
 const executableName = 'neo';
 const packageName = 'neo';
-const description = 'CLI that frees you from remebering long commands.';
+const description = 'The missing CLI for flutter devs.';
 
 /// {@template neo_command_runner}
 /// A [CommandRunner] for the CLI.
@@ -41,7 +43,7 @@ class NeoCommandRunner extends CommandRunner<int> {
       );
 
     // Add sub commands
-    addCommand(Commands(logger: _logger));
+    addCommand(Commands());
     addCommand(UpdateCommand(logger: _logger, pubUpdater: _pubUpdater));
   }
 
@@ -60,9 +62,11 @@ class NeoCommandRunner extends CommandRunner<int> {
       }
 
       // Initialize hive every time when the script runs
+      setupLocator();
       final neoDir = AppData.findOrCreate('.neo');
       Hive.init(neoDir.path);
-      await HiveDB.i.openBox();
+      await locator<AppHiveDbService>().openBox();
+      locator<AppLocalizationService>().setLanguage('en');
 
       return await runCommand(topLevelResults) ?? ExitCode.success.code;
     } on FormatException catch (e, stackTrace) {
