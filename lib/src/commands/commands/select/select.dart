@@ -23,6 +23,10 @@ class SelectCommand extends Command<int> {
       programName: cmds.elementAt(0),
       arguments: [...cmds.sublist(1)],
       logger: _logger,
+      verbose: false,
+      handleOutput: (lines) async {
+        _logger.info(lines.join('\n'));
+      },
     );
   }
 

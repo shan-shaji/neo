@@ -4,7 +4,7 @@ import 'package:hive/hive.dart';
 import 'package:mason_logger/mason_logger.dart';
 import 'package:neo/src/app/locator.dart';
 import 'package:neo/src/commands/commands.dart';
-import 'package:neo/src/helpers/app_data_helper.dart';
+import 'package:neo/src/helpers/app_platform_helper.dart';
 import 'package:neo/src/services/app_services.dart';
 import 'package:neo/src/services/localization/app_localization_service.dart';
 import 'package:neo/src/version.dart';
@@ -62,8 +62,7 @@ class NeoCommandRunner extends CommandRunner<int> {
       }
 
       // Initialize hive every time when the script runs
-      setupLocator();
-      final neoDir = AppData.findOrCreate('.neo');
+      final neoDir = AppPlatformhelper.findOrCreate('.neo');
       Hive.init(neoDir.path);
       await locator<AppHiveDbService>().openBox();
       locator<AppLocalizationService>().setLanguage('en');
