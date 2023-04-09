@@ -18,9 +18,19 @@ class ListCommand extends Command<int> {
   Future<int> run() async {
     final console = Console();
     final savedCommands = _hiveDbCommandService.getCommands();
-    final rows =
-        savedCommands.map((value) => [value.key, value.command]).toList();
-    final table = AppConsoleHelper.renderTable(rows, ['Keys', 'Command']);
+    final rows = savedCommands
+        .map(
+          (value) => [
+            value.id,
+            value.command,
+            value.alias,
+          ],
+        )
+        .toList();
+    final table = AppConsoleHelper.renderTable(
+      rows,
+      ['Keys', 'Command', 'Alias'],
+    );
     console.writeLine(table);
     return ExitCode.success.code;
   }

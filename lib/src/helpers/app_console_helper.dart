@@ -10,8 +10,10 @@ class AppConsoleHelper {
           alignment: TextAlignment.center,
         );
     }
+    final tableRows =
+        rows.map((row) => row.map((e) => e.toString()).toList()).toList();
     table
-      ..insertRows(rows as List<List<Object>>)
+      ..insertRows(tableRows)
       ..borderStyle = BorderStyle.square
       ..borderColor = ConsoleColor.brightCyan
       ..borderType = BorderType.grid;

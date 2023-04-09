@@ -6,7 +6,8 @@ class AppHiveDBCommandsService {
       final box = Hive.box<CliCommand>(_cliCommandsBox);
 
       // Ensure alias is unique
-      if (box.values.any((cliCommand) => cliCommand.alias == alias)) {
+      if (box.values
+          .any((cliCommand) => alias.isNotEmpty && cliCommand.alias == alias)) {
         return false;
       }
 

@@ -29,7 +29,7 @@ class Save extends Command<int> {
         commandAlias,
       );
       return ExitCode.success.code;
-    } catch (e) {
+    } catch (_) {
       return ExitCode.software.code;
     }
   }

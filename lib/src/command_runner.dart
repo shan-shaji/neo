@@ -1,12 +1,8 @@
 import 'package:args/args.dart';
 import 'package:args/command_runner.dart';
-import 'package:hive/hive.dart';
 import 'package:mason_logger/mason_logger.dart';
 import 'package:neo/src/app/locator.dart';
 import 'package:neo/src/commands/commands.dart';
-import 'package:neo/src/helpers/app_platform_helper.dart';
-import 'package:neo/src/services/app_services.dart';
-import 'package:neo/src/services/localization/app_localization_service.dart';
 import 'package:neo/src/version.dart';
 import 'package:pub_updater/pub_updater.dart';
 
@@ -24,10 +20,8 @@ const description = 'The missing CLI for flutter devs.';
 class NeoCommandRunner extends CommandRunner<int> {
   /// {@macro neo_command_runner}
   NeoCommandRunner({
-    Logger? logger,
     PubUpdater? pubUpdater,
-  })  : _logger = logger ?? Logger(),
-        _pubUpdater = pubUpdater ?? PubUpdater(),
+  })  : _pubUpdater = pubUpdater ?? PubUpdater(),
         super(executableName, description) {
     // Add root options and flags
     argParser
@@ -50,7 +44,7 @@ class NeoCommandRunner extends CommandRunner<int> {
   @override
   void printUsage() => _logger.info(usage);
 
-  final Logger _logger;
+  final Logger _logger = locator<Logger>();
   final PubUpdater _pubUpdater;
 
   @override
@@ -60,12 +54,6 @@ class NeoCommandRunner extends CommandRunner<int> {
       if (topLevelResults['verbose'] == true) {
         _logger.level = Level.verbose;
       }
-
-      // Initialize hive every time when the script runs
-      final neoDir = AppPlatformhelper.findOrCreate('.neo');
-      Hive.init(neoDir.path);
-      await locator<AppHiveDbService>().openBox();
-      locator<AppLocalizationService>().setLanguage('en');
 
       return await runCommand(topLevelResults) ?? ExitCode.success.code;
     } on FormatException catch (e, stackTrace) {
