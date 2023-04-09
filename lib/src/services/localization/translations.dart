@@ -5,5 +5,6 @@ const Map<String, Map<String, String>> translations = {
     'neo_select_command_question': 'Select your command: ',
     'neo_save_command_description':
         'Save your flutter commands to your system.',
+    'neo_list_command_description': 'list all your saved commands',
   },
 };

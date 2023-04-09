@@ -24,11 +24,10 @@ class DeleteCommand extends Command<int> {
     final console = Console();
     final key = argResults?['key'];
     if (key is! String) {
-      _logger.info('Please provide a valid key to delete your commands');
+      _logger.warn('Please provide a valid key to delete your commands!');
       return ExitCode.data.code;
     }
     final index = int.tryParse(key) ?? 0;
-    if (index == 0) return ExitCode.ioError.code;
     await _hiveDbCommandService.deleteCommand(index);
     final savedCommands = _hiveDbCommandService.getCommands();
     final rows =

@@ -3,13 +3,14 @@ import 'package:dart_console/dart_console.dart';
 import 'package:mason_logger/mason_logger.dart';
 import 'package:neo/src/app/locator.dart';
 import 'package:neo/src/helpers/app_console_helper.dart';
+import 'package:neo/src/helpers/extensions/app_string_extension_helper.dart';
 import 'package:neo/src/services/app_services.dart';
 
 class ListCommand extends Command<int> {
   final _hiveDbCommandService = locator<AppHiveDBCommandsService>();
 
   @override
-  String get description => 'list all your saved commands';
+  String get description => 'neo_list_command_description'.tr;
 
   @override
   String get name => 'list';
@@ -31,7 +32,9 @@ class ListCommand extends Command<int> {
       rows,
       ['Keys', 'Command', 'Alias'],
     );
-    console.writeLine(table);
+    console
+      ..write('\n')
+      ..writeLine(table);
     return ExitCode.success.code;
   }
 }

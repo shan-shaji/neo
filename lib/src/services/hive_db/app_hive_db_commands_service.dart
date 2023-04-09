@@ -26,8 +26,10 @@ class AppHiveDBCommandsService {
   Future<bool> deleteCommand(int id) async {
     try {
       final box = Hive.box<CliCommand>(_cliCommandsBox);
-      final key = box.keys
-          .firstWhere((key) => box.get(key)!.id == id, orElse: () => -1);
+      final key = box.keys.firstWhere(
+        (key) => box.get(key)!.id == id,
+        orElse: () => -1,
+      );
       if (key == -1) {
         return false;
       }
