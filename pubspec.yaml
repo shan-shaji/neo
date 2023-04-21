@@ -13,7 +13,7 @@ dependencies:
   hive_generator: ^2.0.0
   mason_logger: ^0.2.3
   path: ^1.8.3
-  pub_updater: ^0.2.1
+  pub_updater: ">=0.2.1 <0.4.0"
   pubspec_parse: ^1.2.1
 
 dev_dependencies:
